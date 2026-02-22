@@ -1,0 +1,33 @@
+{
+  "name": "aair",
+  "version": "1.0.0",
+  "description": "AI Agent for IATA Rules & Airline Regulations",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^14.2.21",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "better-sqlite3": "^11.7.0",
+    "openai": "^4.77.0",
+    "formidable": "^3.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^18.3.14",
+    "@types/react-dom": "^18.3.5",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/formidable": "^3.4.5",
+    "typescript": "^5.7.2",
+    "tailwindcss": "^3.4.17",
+    "postcss": "^8.4.49",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.21"
+  }
+}
