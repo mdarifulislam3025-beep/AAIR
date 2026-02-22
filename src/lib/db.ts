@@ -1,4 +1,3 @@
-import Database from "better-sqlite3";
 import path from "path";
 import fs from "fs";
 
@@ -7,71 +6,85 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-const DB_PATH = path.join(DATA_DIR, "aair.db");
+const DB_PATH = path.join(DATA_DIR, "aair.json");
 
-let db: Database.Database | null = null;
+// ── Types ──────────────────────────────────────────────────────────────────────
 
-export function getDb(): Database.Database {
-  if (!db) {
-    db = new Database(DB_PATH);
-    db.pragma("journal_mode = WAL");
-    db.pragma("foreign_keys = ON");
-    initializeDatabase(db);
+interface KnowledgeEntry {
+  id: number;
+  title: string;
+  content: string;
+  category: string;
+  tags: string;
+  source: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface ChatMessage {
+  id: number;
+  session_id: string;
+  role: "user" | "assistant";
+  content: string;
+  created_at: string;
+}
+
+interface UploadedDocument {
+  id: number;
+  filename: string;
+  content: string;
+  file_type: string;
+  size_bytes: number;
+  created_at: string;
+}
+
+interface DbStore {
+  knowledge_entries: KnowledgeEntry[];
+  chat_history: ChatMessage[];
+  settings: Record<string, string>;
+  uploaded_documents: UploadedDocument[];
+  _sequences: { knowledge: number; chat: number; documents: number };
+}
+
+// ── Persistence helpers ────────────────────────────────────────────────────────
+
+function now(): string {
+  return new Date().toISOString().replace("T", " ").substring(0, 19);
+}
+
+function loadDb(): DbStore {
+  if (fs.existsSync(DB_PATH)) {
+    try {
+      return JSON.parse(fs.readFileSync(DB_PATH, "utf-8")) as DbStore;
+    } catch {
+      // corrupted – start fresh
+    }
   }
-  return db;
+  return {
+    knowledge_entries: [],
+    chat_history: [],
+    settings: {},
+    uploaded_documents: [],
+    _sequences: { knowledge: 0, chat: 0, documents: 0 },
+  };
 }
 
-function initializeDatabase(db: Database.Database) {
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS knowledge_entries (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title TEXT NOT NULL,
-      content TEXT NOT NULL,
-      category TEXT NOT NULL DEFAULT 'general',
-      tags TEXT DEFAULT '',
-      source TEXT DEFAULT 'admin',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS chat_history (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      session_id TEXT NOT NULL,
-      role TEXT NOT NULL CHECK(role IN ('user', 'assistant')),
-      content TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS settings (
-      key TEXT PRIMARY KEY,
-      value TEXT NOT NULL,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS uploaded_documents (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      filename TEXT NOT NULL,
-      content TEXT NOT NULL,
-      file_type TEXT NOT NULL,
-      size_bytes INTEGER DEFAULT 0,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE INDEX IF NOT EXISTS idx_knowledge_category ON knowledge_entries(category);
-    CREATE INDEX IF NOT EXISTS idx_knowledge_tags ON knowledge_entries(tags);
-    CREATE INDEX IF NOT EXISTS idx_chat_session ON chat_history(session_id);
-  `);
+function saveDb(store: DbStore): void {
+  fs.writeFileSync(DB_PATH, JSON.stringify(store, null, 2), "utf-8");
 }
 
-// Knowledge entries CRUD
-export function getAllKnowledgeEntries() {
-  const db = getDb();
-  return db.prepare("SELECT * FROM knowledge_entries ORDER BY updated_at DESC").all();
+// ── Knowledge entries CRUD ─────────────────────────────────────────────────────
+
+export function getAllKnowledgeEntries(): KnowledgeEntry[] {
+  const store = loadDb();
+  return [...store.knowledge_entries].sort(
+    (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+  );
 }
 
-export function getKnowledgeEntryById(id: number) {
-  const db = getDb();
-  return db.prepare("SELECT * FROM knowledge_entries WHERE id = ?").get(id);
+export function getKnowledgeEntryById(id: number): KnowledgeEntry | undefined {
+  const store = loadDb();
+  return store.knowledge_entries.find((e) => e.id === id);
 }
 
 export function createKnowledgeEntry(entry: {
@@ -80,133 +93,163 @@ export function createKnowledgeEntry(entry: {
   category: string;
   tags?: string;
   source?: string;
-}) {
-  const db = getDb();
-  const stmt = db.prepare(
-    "INSERT INTO knowledge_entries (title, content, category, tags, source) VALUES (?, ?, ?, ?, ?)"
-  );
-  const result = stmt.run(
-    entry.title,
-    entry.content,
-    entry.category,
-    entry.tags || "",
-    entry.source || "admin"
-  );
-  return { id: result.lastInsertRowid, ...entry };
+}): KnowledgeEntry {
+  const store = loadDb();
+  store._sequences.knowledge += 1;
+  const newEntry: KnowledgeEntry = {
+    id: store._sequences.knowledge,
+    title: entry.title,
+    content: entry.content,
+    category: entry.category,
+    tags: entry.tags || "",
+    source: entry.source || "admin",
+    created_at: now(),
+    updated_at: now(),
+  };
+  store.knowledge_entries.push(newEntry);
+  saveDb(store);
+  return newEntry;
 }
 
 export function updateKnowledgeEntry(
   id: number,
   entry: { title?: string; content?: string; category?: string; tags?: string }
-) {
-  const db = getDb();
-  const fields: string[] = [];
-  const values: (string | number)[] = [];
-
-  if (entry.title !== undefined) { fields.push("title = ?"); values.push(entry.title); }
-  if (entry.content !== undefined) { fields.push("content = ?"); values.push(entry.content); }
-  if (entry.category !== undefined) { fields.push("category = ?"); values.push(entry.category); }
-  if (entry.tags !== undefined) { fields.push("tags = ?"); values.push(entry.tags); }
-
-  fields.push("updated_at = CURRENT_TIMESTAMP");
-  values.push(id);
-
-  const stmt = db.prepare(`UPDATE knowledge_entries SET ${fields.join(", ")} WHERE id = ?`);
-  return stmt.run(...values);
+): boolean {
+  const store = loadDb();
+  const idx = store.knowledge_entries.findIndex((e) => e.id === id);
+  if (idx === -1) return false;
+  const existing = store.knowledge_entries[idx];
+  store.knowledge_entries[idx] = {
+    ...existing,
+    ...(entry.title !== undefined && { title: entry.title }),
+    ...(entry.content !== undefined && { content: entry.content }),
+    ...(entry.category !== undefined && { category: entry.category }),
+    ...(entry.tags !== undefined && { tags: entry.tags }),
+    updated_at: now(),
+  };
+  saveDb(store);
+  return true;
 }
 
-export function deleteKnowledgeEntry(id: number) {
-  const db = getDb();
-  return db.prepare("DELETE FROM knowledge_entries WHERE id = ?").run(id);
+export function deleteKnowledgeEntry(id: number): boolean {
+  const store = loadDb();
+  const before = store.knowledge_entries.length;
+  store.knowledge_entries = store.knowledge_entries.filter((e) => e.id !== id);
+  saveDb(store);
+  return store.knowledge_entries.length < before;
 }
 
-export function searchKnowledge(query: string, limit = 10) {
-  const db = getDb();
+export function searchKnowledge(query: string, limit = 10): KnowledgeEntry[] {
+  const store = loadDb();
   const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
   if (terms.length === 0) return [];
 
-  const conditions = terms.map(() => "(LOWER(title) LIKE ? OR LOWER(content) LIKE ? OR LOWER(tags) LIKE ?)");
-  const params = terms.flatMap((t) => {
-    const like = `%${t}%`;
-    return [like, like, like];
-  });
+  const scored = store.knowledge_entries
+    .map((e) => {
+      const titleL = e.title.toLowerCase();
+      const contentL = e.content.toLowerCase();
+      const tagsL = e.tags.toLowerCase();
+      let score = 0;
+      for (const t of terms) {
+        if (titleL.includes(t)) score += 3;
+        if (tagsL.includes(t)) score += 2;
+        if (contentL.includes(t)) score += 1;
+      }
+      return { entry: e, score };
+    })
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((x) => x.entry);
 
-  const sql = `SELECT *, (
-    ${terms.map((_, i) => `(CASE WHEN LOWER(title) LIKE ? THEN 3 ELSE 0 END + CASE WHEN LOWER(tags) LIKE ? THEN 2 ELSE 0 END + CASE WHEN LOWER(content) LIKE ? THEN 1 ELSE 0 END)`).join(" + ")}
-  ) as relevance
-  FROM knowledge_entries
-  WHERE ${conditions.join(" OR ")}
-  ORDER BY relevance DESC
-  LIMIT ?`;
-
-  const scoreParams = terms.flatMap((t) => {
-    const like = `%${t}%`;
-    return [like, like, like];
-  });
-
-  return db.prepare(sql).all(...scoreParams, ...params, limit);
+  return scored;
 }
 
-// Settings
+// ── Settings ───────────────────────────────────────────────────────────────────
+
 export function getSetting(key: string): string | null {
-  const db = getDb();
-  const row = db.prepare("SELECT value FROM settings WHERE key = ?").get(key) as { value: string } | undefined;
-  return row?.value ?? null;
+  const store = loadDb();
+  return store.settings[key] ?? null;
 }
 
-export function setSetting(key: string, value: string) {
-  const db = getDb();
-  db.prepare(
-    "INSERT INTO settings (key, value, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP) ON CONFLICT(key) DO UPDATE SET value = ?, updated_at = CURRENT_TIMESTAMP"
-  ).run(key, value, value);
+export function setSetting(key: string, value: string): void {
+  const store = loadDb();
+  store.settings[key] = value;
+  saveDb(store);
 }
 
-// Chat history
-export function saveChatMessage(sessionId: string, role: "user" | "assistant", content: string) {
-  const db = getDb();
-  db.prepare("INSERT INTO chat_history (session_id, role, content) VALUES (?, ?, ?)").run(
-    sessionId,
+// ── Chat history ───────────────────────────────────────────────────────────────
+
+export function saveChatMessage(
+  sessionId: string,
+  role: "user" | "assistant",
+  content: string
+): void {
+  const store = loadDb();
+  store._sequences.chat += 1;
+  store.chat_history.push({
+    id: store._sequences.chat,
+    session_id: sessionId,
     role,
-    content
-  );
+    content,
+    created_at: now(),
+  });
+  saveDb(store);
 }
 
-export function getChatHistory(sessionId: string, limit = 20) {
-  const db = getDb();
-  return db
-    .prepare("SELECT * FROM chat_history WHERE session_id = ? ORDER BY created_at DESC LIMIT ?")
-    .all(sessionId, limit)
+export function getChatHistory(sessionId: string, limit = 20): ChatMessage[] {
+  const store = loadDb();
+  const msgs = store.chat_history
+    .filter((m) => m.session_id === sessionId)
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    .slice(0, limit)
     .reverse();
+  return msgs;
 }
 
-// Documents
-export function saveDocument(doc: { filename: string; content: string; file_type: string; size_bytes: number }) {
-  const db = getDb();
-  const stmt = db.prepare(
-    "INSERT INTO uploaded_documents (filename, content, file_type, size_bytes) VALUES (?, ?, ?, ?)"
-  );
-  return stmt.run(doc.filename, doc.content, doc.file_type, doc.size_bytes);
-}
+// ── Documents ──────────────────────────────────────────────────────────────────
 
-export function getAllDocuments() {
-  const db = getDb();
-  return db.prepare("SELECT id, filename, file_type, size_bytes, created_at FROM uploaded_documents ORDER BY created_at DESC").all();
-}
-
-// Stats
-export function getStats() {
-  const db = getDb();
-  const totalEntries = (db.prepare("SELECT COUNT(*) as count FROM knowledge_entries").get() as { count: number }).count;
-  const totalDocuments = (db.prepare("SELECT COUNT(*) as count FROM uploaded_documents").get() as { count: number }).count;
-  const totalChats = (db.prepare("SELECT COUNT(DISTINCT session_id) as count FROM chat_history").get() as { count: number }).count;
-  const categories = db.prepare("SELECT DISTINCT category FROM knowledge_entries ORDER BY category").all() as { category: string }[];
-  const recentEntries = db.prepare("SELECT id, title, category, created_at FROM knowledge_entries ORDER BY created_at DESC LIMIT 5").all();
-
-  return {
-    totalEntries,
-    totalDocuments,
-    totalChats,
-    categories: categories.map((c) => c.category),
-    recentEntries,
+export function saveDocument(doc: {
+  filename: string;
+  content: string;
+  file_type: string;
+  size_bytes: number;
+}): UploadedDocument {
+  const store = loadDb();
+  store._sequences.documents += 1;
+  const newDoc: UploadedDocument = {
+    id: store._sequences.documents,
+    filename: doc.filename,
+    content: doc.content,
+    file_type: doc.file_type,
+    size_bytes: doc.size_bytes,
+    created_at: now(),
   };
+  store.uploaded_documents.push(newDoc);
+  saveDb(store);
+  return newDoc;
+}
+
+export function getAllDocuments(): Omit<UploadedDocument, "content">[] {
+  const store = loadDb();
+  return [...store.uploaded_documents]
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    .map(({ content: _content, ...rest }) => rest);
+}
+
+// ── Stats ──────────────────────────────────────────────────────────────────────
+
+export function getStats() {
+  const store = loadDb();
+  const totalEntries = store.knowledge_entries.length;
+  const totalDocuments = store.uploaded_documents.length;
+  const sessionIds = new Set(store.chat_history.map((m) => m.session_id));
+  const totalChats = sessionIds.size;
+  const categories = Array.from(new Set(store.knowledge_entries.map((e) => e.category))).sort();
+  const recentEntries = [...store.knowledge_entries]
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    .slice(0, 5)
+    .map(({ id, title, category, created_at }) => ({ id, title, category, created_at }));
+
+  return { totalEntries, totalDocuments, totalChats, categories, recentEntries };
 }
