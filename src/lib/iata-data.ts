@@ -81,7 +81,7 @@ export const IATA_KNOWLEDGE_BASE: IATAKnowledgeEntry[] = [
 
 1. **Fare Basis Codes**: Alphanumeric codes identifying fare type and conditions. First letter typically indicates class (Y=Economy full fare, B/M/H=Economy discount, C/J=Business, F/A=First).
 
-2. **Fare Construction**: Uses the IATA Mileage System or Routing System to calculate fares for multi-sector journeys. The Mileage Principle allows up to 20% excess mileage (EMA - Excess Mileage Allowance) before surcharges apply.
+2. **Fare Construction**: Uses the IATA Mileage System or Routing System to calculate fares for multi-sector journeys. The Mileage Principle allows up to 20% excess mileage (EMA) before surcharges apply.
 
 3. **Currency Rules (NUC)**: Fares are filed in Neutral Units of Construction (NUC) and converted to local currency using IATA Rate of Exchange (IROE) published monthly.
 
@@ -113,7 +113,7 @@ export const IATA_KNOWLEDGE_BASE: IATAKnowledgeEntry[] = [
 
 5. **No-Show Policy**: Passengers who fail to show for a flight may forfeit the ticket value. Some airlines allow rebooking with a no-show fee.
 
-6. **EU261 Regulation**: For flights departing from EU airports or on EU carriers arriving in EU, additional compensation of €250-€600 may apply for cancellations and long delays.`,
+6. **EU261 Regulation**: For flights departing from EU airports or on EU carriers arriving in EU, additional compensation of 250-600 EUR may apply for cancellations and long delays.`,
     category: "ticketing",
     tags: "refund,changes,voluntary,involuntary,EU261,no-show,cancellation",
   },
@@ -181,9 +181,9 @@ export const IATA_KNOWLEDGE_BASE: IATAKnowledgeEntry[] = [
    - Maximum compensation: $1,550
 
 3. **EU Regulation 261/2004**: For EU flights:
-   - €250 for flights up to 1,500 km
-   - €400 for intra-EU flights over 1,500 km and other flights 1,500-3,500 km
-   - €600 for flights over 3,500 km
+   - 250 EUR for flights up to 1,500 km
+   - 400 EUR for intra-EU flights over 1,500 km and other flights 1,500-3,500 km
+   - 600 EUR for flights over 3,500 km
    - Plus right to refund or re-routing, meals, and accommodation
 
 4. **Priority Rules**: When involuntary denied boarding occurs, airlines should consider factors like check-in time, fare class, frequent flyer status, and connection requirements.
@@ -202,7 +202,7 @@ export const IATA_KNOWLEDGE_BASE: IATAKnowledgeEntry[] = [
    - 4+ hours (long-haul): Meals, refreshments, communication
    - 5+ hours: Right to refund
    - Overnight: Hotel accommodation and transport
-   - 3+ hour arrival delay: Compensation (€250-€600) unless extraordinary circumstances
+   - 3+ hour arrival delay: Compensation (250-600 EUR) unless extraordinary circumstances
 
 2. **EU261 - Cancellations**:
    - Right to refund or re-routing
@@ -361,7 +361,7 @@ export const IATA_KNOWLEDGE_BASE: IATAKnowledgeEntry[] = [
    - LD7 (AAA): Full-width lower deck pallet
    - M1 (PMC): Main deck pallet
 
-5. **Cargo Rates**: Based on weight or volume (whichever is greater). Volume weight calculated as: L × W × H (cm) / 6000 = volume weight (kg).
+5. **Cargo Rates**: Based on weight or volume (whichever is greater). Volume weight calculated as: L x W x H (cm) / 6000 = volume weight (kg).
 
 6. **Special Cargo**: Perishables (PER), Live Animals (AVI), Valuable Cargo (VAL), Human Remains (HUM) each have specific handling requirements.`,
     category: "cargo",
@@ -420,7 +420,7 @@ export const IATA_KNOWLEDGE_BASE: IATAKnowledgeEntry[] = [
     tags: "CORSIA,SAF,environment,carbon,emissions,net-zero,sustainability",
   },
 
-  // === ACCESSIBILITY ===
+  // === PASSENGER SERVICES ===
   {
     title: "IATA Passenger Accessibility and Special Assistance",
     content: `IATA guidelines for passengers requiring special assistance:
@@ -445,6 +445,467 @@ export const IATA_KNOWLEDGE_BASE: IATAKnowledgeEntry[] = [
 6. **Medical Clearance (MEDIF)**: Required for passengers with medical conditions that may affect their fitness to fly. Airlines use the IATA MEDIF form for assessment.`,
     category: "passenger-services",
     tags: "accessibility,wheelchair,SSR,disability,unaccompanied-minor,MEDIF,special-assistance",
+  },
+
+  // === RESOLUTION 800 ===
+  {
+    title: "Resolution 800 - Overview, Purpose & Applicability",
+    content: `IATA Resolution 800 governs Passenger Sales Agency Rules (PAC 59, 60, 61).
+
+**Applicable Markets:** Afghanistan, Algeria, Belarus, Bhutan, Brunei Darussalam, Burundi, Cape Verde, Cuba, Comoros, DPRK, Democratic Republic of Congo, Djibouti, Equatorial Guinea, Eritrea, Falkland Islands, Gambia, Guinea, Guinea-Bissau, Islamic Republic of Iran, Iraq, Israel, Laos, Liberia, Libya, Madagascar, Maldives, Myanmar, Palestinian Territories, Sao Tome and Principe, Seychelles, Somalia, Sudan, Syrian Arab Republic, Tajikistan, Timor Leste, Turkmenistan, Venezuela, Uzbekistan and Yemen.
+
+**Purpose:** To encourage the orderly promotion and sale of international air transportation by Members through their Accredited Agents in an efficient manner based on established business procedures.
+
+**Key Principles:**
+1. Only Accredited Agents to be Appointed: A travel agency appointed by a Member must be an Accredited Agent operating from an Approved Location on the Agency List.
+2. Duty to Promote and Sell: An Accredited Agent undertakes to represent the interests of the Member and promote and sell international air transportation.
+3. Agency Investigation Panel: Activities contained in Section 3. Where no AIP exists, the Agency Administrator exercises those duties.
+
+**Resolution Type:** Type B | Expiry: Indefinite`,
+    category: "agency-rules",
+    tags: "resolution-800,IATA,passenger-sales,agency,accreditation,markets,applicability,purpose",
+  },
+  {
+    title: "Resolution 800 - Accreditation Criteria & Financial Standing (Section 2)",
+    content: `Section 2 of Resolution 800 defines the criteria for accreditation and retention of IATA Agents.
+
+**General Requirements (Section 2.1-2.4):**
+- Any Person in possession of appropriate official licences may be considered for inclusion on the Agency List.
+- When an Accredited Agent does not continue to meet requirements, the Agency Administrator shall initiate a review.
+- If an application contained a material inaccurate or incomplete statement, the Agency Administrator may give notice of termination.
+
+**Financial Standing (Section 2.4.1):**
+- The applicant must provide accredited accounts showing satisfactory financial standing and ability to remain solvent.
+- Financial statements must be independently produced in accordance with local accounting practices.
+- Factors considered: (i) Availability of adequate liquid funds, (ii) Capital commensurate with fixed assets, (iii) Preferential claims on assets and contingent liabilities.
+- The applicant may be required to provide bank or insurance bonds or guarantees.
+- Failure to renew bonds/guarantees by expiry date constitutes grounds for termination.
+
+**Other Key Criteria:**
+- Section 2.4.2: Applicant must wholly own and fully manage the business.
+- Section 2.4.3: At least two full-time travel staff qualified to sell international air transportation.
+- Section 2.4.4: Place of business must be open regularly, clearly identified as a travel agency, and freely accessible to the public.
+- Section 2.4.5: Applicant must not have a name misleadingly similar to an IATA Member or IATA.
+- Section 2.4.6: Applicant, managerial staff, or principal stockholders shall not have been found guilty of wilful violations of fiduciary obligations or be undischarged bankrupts.
+- Section 2.4.7: No person who is a director shall have been involved in an Agent removed from the Agency List or under notice of default.
+- Section 2.4.8: Applicant must not be a General Sales Agent for a Member in the country where the location is situated.
+- Section 2.4.9: Must take all necessary actions for safe custody of Standard Traffic Documents.
+- Section 2.4.11: In BSP countries, must have facility to issue STDs through an approved Electronic Ticketing System.
+- Section 2.4.13: Must possess a valid licence to trade where officially required.
+- Section 2.4.14: All material statements in the application shall be accurate and complete.
+
+**Special Cases:**
+- Section 2.5: AIP may approve an application in areas where no persons could otherwise meet requirements.
+- Section 2.6: Tour Operators solely concerned with organising Inclusive Tours may be accredited even without a place freely accessible to the public.`,
+    category: "agency-rules",
+    tags: "accreditation,financial-standing,criteria,agency-list,retention,qualifications,section-2,bonds,guarantees",
+  },
+  {
+    title: "Resolution 800 - Financial Assessments for Agents with Amount at Risk Greater than USD 5 Million (Section 2.7)",
+    content: `Section 2.7 of Resolution 800 establishes additional financial and operational review requirements for Agents with a high Amount at Risk.
+
+**Applicability (Section 2.7.1):** An Agent with an Amount at Risk greater than USD 5,000,000 will be subject to additional financial and operational reviews per Attachment C. Any cost associated with such review will be borne by the Agent.
+
+**Assessment Framework Structure (Section 2.7.2):**
+- Key Criterion: Failing one Key criterion results in failing the entire section.
+- Standard Criterion: Failing a specified number of Standard criteria results in failing the section.
+
+**Passing the Assessment (Section 2.7.3):** The Agent must pass ALL sections of the framework per Attachment C.
+
+**Consequences of Failure (Section 2.7.4):** The Agent will be required to provide a Financial Security to cover any Amount at Risk in excess of USD 5,000,000.
+
+**Ongoing Annual Examination (Section 2.7.5):** The Agent will continue to undergo annual examination of its financial standing per Section 2.4.1.
+
+**Three Assessment Sections:**
+1. Section 1 - Historical Financial Data: EBITDA, cash ratio, quick ratio, free cash flow, net equity, net sales trends, net income, interest coverage ratio, and auditor qualifications.
+2. Section 2 - Forecasted Financial Process: Effective business forecast and cash flow forecast processes (minimum 1-year visibility).
+3. Section 3 - Operational Review: Disaster management, cybersecurity management, and data protection compliance.
+
+**General Result:** Any failure in any of the above sections results in a failed assessment overall.`,
+    category: "agency-rules",
+    tags: "financial-assessment,amount-at-risk,USD-5-million,financial-security,high-risk,section-2.7,key-criterion,standard-criterion",
+  },
+  {
+    title: "Resolution 800 - Agency Investigation Panel (Section 3)",
+    content: `Section 3 of Resolution 800 governs the constitution, procedures, and authority of the Agency Investigation Panel (AIP).
+
+**Constitution (Section 3.1.1):**
+- The Agency Administrator shall set up an AIP in each country where warranted.
+- Where no AIP exists, the Agency Administrator exercises the duties and authority of the AIP.
+- Any Member may participate by giving written notification of a senior management representative.
+- The Chair and Secretary are normally provided by the Member national carrier(s).
+- On full implementation of BSP in a country, the AIP shall have six months to disband and transfer accreditation activities to the IATA office.
+
+**Procedures (Section 3.2):**
+- The AIP shall meet when convened by the Secretary, or at the request of the Agency Administrator or one-third of participating Members.
+- The AIP shall meet not less than four times a year.
+- A quorum is constituted by a simple majority of Members operating to the territory of the AIP.
+- Decisions are taken by vote; no abstentions, secret voting, or proxy voting.
+
+**Authority (Section 3.4):**
+- Two-thirds majority vote: Applications for inclusion on the Agency List, changes of ownership/legal status, changes of name or location.
+- Unanimous vote: Applications under Section 2.4.8(b), increases in frequency of sales reports and remittances.
+
+**Electronic Ticketing (Section 3.5):**
+- A Member or Airline participating in BSP may issue an Electronic Ticketing (ET) Authority to an Agent's Head or Branch Office Location.
+- Any Member or Airline may cancel ET Authority by notifying the Agent in writing or updating BSPlink.`,
+    category: "agency-rules",
+    tags: "agency-investigation-panel,AIP,voting,procedures,electronic-ticketing-authority,BSP,section-3,quorum,constitution",
+  },
+  {
+    title: "Resolution 800 - Accreditation Procedures & Agency List (Section 4)",
+    content: `Section 4 of Resolution 800 covers the procedures for accreditation of agents and management of the Agency List.
+
+**Processing Applications (Section 4.1):**
+- Upon receipt, the Secretary verifies completeness of the application.
+- If complete, the Secretary publishes to Members, designates two investigators from the AIP, and obtains a financial evaluation.
+- If the AIP finds the applicant meets Section 2 requirements, it may approve by a two-thirds majority vote.
+- The Agency Administrator enters the name and location on the Agency List and notifies the Agent and Members within 15 days.
+- If the AIP cannot reach a two-thirds majority, the application is forwarded to the Agency Administrator for decision.
+- When an application is rejected, the Agency Administrator notifies the applicant in writing with full reasons.
+
+**Reconsideration (Section 4.2):** A rejected applicant may within 30 days request reconsideration by the AIP or invoke review by the Travel Agency Commissioner.
+
+**The Agency List (Section 4.3):** The Agency Administrator maintains, publishes, and circulates the Agency List containing:
+- Name and postal address, Address of place of business, Type (Head Office, Branch, or Administrative Office), Date of approval, IATA Numeric Code.
+
+**Agency Fees (Section 4.4):**
+- Annual fees are due no later than December 1 of the preceding year.
+- Invoices are issued in Swiss Francs (CHF) and collected through the BSP.
+- Non-payment by December 31 results in termination of the Sales Agency Agreement.
+- Reinstatement is possible if overdue fees are received by March 1 (if late payment was beyond Agent's control).
+- Lack of compliance to report major changes within 30 days: CHF 1,500 fee.`,
+    category: "agency-rules",
+    tags: "accreditation,agency-list,application,procedures,agency-fees,numeric-code,section-4,registration,annual-fee,CHF",
+  },
+  {
+    title: "Resolution 800 - Agent Appointments & Traffic Documents (Section 5)",
+    content: `Section 5 of Resolution 800 governs the execution of Sales Agency Agreements and the appointment of Agents by Members.
+
+**Sales Agency Agreement (Section 5.1):** The Director General, acting on behalf of IATA Members, shall execute a Sales Agency Agreement with each accredited Agent.
+
+**Appointment of Agents by Members or BSP Airlines (Section 5.2):**
+- Through the Agency Administrator: Effective for all locations unless the Member notifies IATA of geographical exclusions.
+- By Certificate of Appointment: Delivered to the Agent in the form prescribed by Resolution 820, with a copy simultaneously transmitted to the Agency Administrator.
+
+**Traffic Documents (Section 5.3):**
+- Delivery of Traffic Documents to an Agent is at the option of the Member.
+- No Member shall deliver Traffic Documents to an Agent in a BSP area unless the Member has appointed the Agent.
+- In the event a Member ceases all scheduled international air service due to financial failure, the Agency Administrator shall cause that Member's Traffic Documents to be removed from all Approved Locations.
+- ISS Management provides Agents in BSP countries with ranges of Standard Traffic Document (STD) numbers.
+
+**Additional Responsibilities of Agent (Section 5.4):**
+- STDs shall be issued only at an Approved Location using only the ticketing authority deposited by the Member or Airline.
+- An Agent shall not issue an STD for transportation solely on another air carrier unless authorised by the Member whose STD was used.
+- An Agent that does not issue STDs for more than 12 months shall have its Ticketing Authority removed.
+
+**Capacity and Indemnity (Section 5.5):** Members or BSP Airlines appointing Agents undertake to indemnify IATA against liability for any action taken or omitted in good faith in the performance of their functions under these Rules.`,
+    category: "agency-rules",
+    tags: "appointments,sales-agency-agreement,traffic-documents,ticketing-authority,BSP,section-5,STD,certificate-of-appointment,indemnity",
+  },
+  {
+    title: "Resolution 800 - Security Standards for Premises & Systems (Section 6)",
+    content: `Section 6 of Resolution 800 establishes minimum security standards for Agent premises and systems.
+
+**Duty of Care (Section 6.1):** The Agent has a duty of care to take all reasonable care and precautions to protect all Standard Traffic Documents (STDs) from unauthorised or improper issuance, post-issuance tampering, or forgery. This includes:
+
+(a) Confidentiality:
+- Compliance with all GDS and/or Members' instructions regarding system security and best practices for Identity and Access Management (password policy, maintenance, and multi-factor authentication).
+- Usage of functional and up-to-date operating systems, firewalls, anti-malware, virus detection, and data loss prevention software.
+- Restrict data access to Agent systems only to employees with a strict business need.
+
+(b) Integrity:
+- Ensure completeness and accuracy of all data in storage, transit, and backups with modern encryption.
+
+(c) Availability:
+- Ensure data is backed up and allows guaranteed reliable access by authorised Agent employees.
+- Ensure systems are protected from Denial of Service (DoS) attacks or other interruptions.
+
+**Report of Security Breaches (Section 6.2):** In the event of any unlawful entry to Agent premises, the Agent shall immediately notify local police authorities and IATA.
+
+**Verification Action (Section 6.3):** Upon receipt of advice that an Agent has suffered loss due to robbery, theft, burglary, fraud, or other unlawful means, IATA shall immediately notify all BSP Airlines in the country.
+
+**Failure to Fulfil Contractual Obligations (Section 6.4):** Any BSP Airline or the Agency Administrator may request a review by the Travel Agency Commissioner if an Agent alters or falsifies entries in STDs.`,
+    category: "agency-rules",
+    tags: "security,premises,systems,duty-of-care,cybersecurity,data-protection,STD,section-6,MFA,encryption,DoS,breach",
+  },
+  {
+    title: "Resolution 800 - Change of Ownership, Name & Location (Section 11)",
+    content: `Section 11 of Resolution 800 governs notification and processing of changes to an Agent's ownership, legal status, name, or location.
+
+**Notification Requirements (Section 11.1):** Notification must be given to the Agency Administrator prior to the change.
+
+**Changes Requiring a New Sales Agency Agreement (Section 11.2.1):**
+- Sole owner, partnership, or unincorporated firm: disposal of interest transferring control, admission/withdrawal of a partner, incorporation.
+- Corporation: disposal of business to a non-Agent, transformation into a partnership, any change reducing liability of a previously liable person, any change in legal personality.
+
+**Changes NOT Requiring a New Sales Agency Agreement (Section 11.2.2):**
+- Reduction of capital
+- Disposal or acquisition of stock representing 30% or more of total issued share capital
+- Transfer of stock not vesting control in a new person (single or series of transactions over 3 years or less)
+- Disposal or acquisition of stock representing 29% or less (no current financial review required)
+
+**Procedures for Changes Requiring New Agreement (Section 11.3):**
+- The transferor and transferee must jointly give the Agency Administrator notice at least 60 days before the change using the Notice of Change form (Attachment A).
+- The transferor accepts liability for outstanding Billings until IATA is notified of the Change of Ownership date.
+- The Agent will in all cases be required to provide a Financial Security in accordance with Resolution 800f until satisfactory financial statements are produced.
+
+**Other Changes:**
+- Change of Name (Section 11.11): Must notify Agency Administrator before effecting the change. AIP must recommend approval by two-thirds majority vote.
+- Move of Approved Location (Section 11.12): Must notify Agency Administrator as far in advance as possible. Authority continues at the new location for up to five working days after the Approved Location closes.
+- Late Notification (Section 11.15): Failure to notify within 30 days of a change of name or location can result in a Notice of Irregularity and review.`,
+    category: "agency-rules",
+    tags: "change-of-ownership,legal-status,name-change,location,notice-of-change,transferee,section-11,financial-security,expedited,AIP",
+  },
+  {
+    title: "Resolution 800 - Agent Standing, Removal & Reinstatement (Section 14)",
+    content: `Section 14 of Resolution 800 covers measures affecting an IATA Agent's standing, including removal, voluntary relinquishment, and reinstatement.
+
+**Effect of Removal (Section 14.1):** When an Agent or Approved Location is removed from the Agency List:
+- The Director General terminates the Agent's Sales Agency Agreement by written notice.
+- The Agency Administrator notifies all Members.
+- A new application for approval shall not be accepted within six months from the date of removal.
+
+**Voluntary Relinquishment (Section 14.2):** An Accredited Agent may voluntarily relinquish its accreditation for all or any Approved Locations at any time by notifying the Agency Administrator or the Secretary of the AIP in writing.
+
+**Other Measures Affecting Operation (Section 14.3):**
+- When an Agent is declared bankrupt, placed in receivership, goes into liquidation, or becomes subject to similar legal procedures, the Agency Administrator shall remove the Agent from the Agency List.
+- When evidence is produced that an Agent uses its IATA accreditation to engage in activities detrimental to IATA's good standing, the Agency Administrator may remove the Agent from the Agency List.
+
+**Effect of Removal in BSP Areas (Section 14.4):** ISS Management shall withdraw all Standard Traffic Documents supplied to the Agent and require an immediate accounting and settlement of all monies due under the Billing and Settlement Plan.
+
+**Reinstatement After Termination (Section 14.6):** IATA may reinstate the Agent to the Agency List within 60 days of termination, provided:
+(a) All Accountable Transactions and any outstanding Charges are settled.
+(b) Where applicable, the Financial Security held prior to termination is re-issued and valid in accordance with Resolution 850p.
+
+**Use of IATA Logo (Section 14.7):** An IATA Accredited Agent may use the IATA logo on letterhead and publicity materials exactly as illustrated in the Travel Agents Handbooks.
+
+**Force Majeure (Section 14.8):** The Agent shall not be liable for delay or failure to comply with the Passenger Sales Agency Agreement if caused by acts of God, war, natural disaster, strike, fire, third-party criminal act, quarantine restriction, act of government, or other causes beyond the Agent's reasonable control.`,
+    category: "agency-rules",
+    tags: "removal,reinstatement,termination,agency-list,default,bankruptcy,IATA-logo,section-14,force-majeure,BSP,voluntary-relinquishment",
+  },
+  {
+    title: "Resolution 800 - Attachment C: Financial Assessment Framework Criteria",
+    content: `Attachment C of Resolution 800 defines the Financial Assessment Framework for Agents with an Amount at Risk greater than USD 5,000,000.
+
+**SECTION 1 - Historical Financial Data:**
+- 1.01 EBITDA (Last 12 months): x > 0 [KEY]
+- 1.02 EBITDA (quarterly): x > 0 [Standard]
+- 1.03 Cash ratio (Cash / Current liabilities): x >= 30% [Standard]
+- 1.04 Quick ratio ((Cash + AR) / Current liabilities): x >= 50% [Standard]
+- 1.05 Free cash flow (Last 12 months): x > 0 [KEY]
+- 1.05a Trends Analysis (applied only if Free cash flow is not positive): 4 Fails = 1.05 Fail [KEY]
+- 1.06 Positive Net Equity: x > 0 [Standard]
+- 1.07 Decrease in net sales (Last 12M N vs N-1): x >= -20% [Standard]
+- 1.08 Net Income 12 months: x > 0 [Standard]
+- 1.09 Interest Coverage Ratio (EBIT / Interest Expense): x > 2.5 [Standard]
+- 1.10 Qualification from auditors: No [Standard]
+
+Section 1 Pass/Fail Rule: 1 Key ratio fail = Total Fail; 4 Standard ratio fails = Total Fail.
+
+**SECTION 2 - Forecasted Financial Process:**
+- 2.01 Effective Business Forecast (at least 1-year visibility): Yes [KEY]
+- 2.02 Effective Cash Flow Forecast (at least 1 year): Yes [KEY]
+
+**SECTION 3 - Operational Review:**
+- 3.01 Effective Disaster Management (ISO 22301 or equivalent): Yes [KEY]
+- 3.02a Chief Information Security Officer appointed: Yes [KEY]
+- 3.02b Information security strategy/roadmap aligned with IT and business strategies: Yes [Standard]
+- 3.02c Formalised and enforced information security policy: Yes [KEY]
+- 3.02d Information security risk assessment performed: Yes [KEY]
+- 3.02e Information security controls and measures implemented: Yes [KEY]
+- 3.02f Regular employee training on information security risks: Yes [KEY]
+- 3.02g Information security incidents managed: Yes [KEY]
+- 3.02h Regular vulnerability scans and penetration tests performed: Yes [KEY]
+- 3.02i Security patches implemented at least every 3 months: Yes [KEY]
+- 3.02l Specific measures to ensure continuity of information systems following a cyberattack: Yes [KEY]
+- 3.03a Data Protection Officer or similar role appointed: Yes [KEY]
+- 3.03b Formalised and enforced data protection policy: Yes [KEY]
+- 3.03c Formalised and enforced information classification policy: Yes [KEY]
+- 3.03d Documented register of personal data processing activities with lawful grounds: Yes [KEY]
+- 3.03e Data protection notices adequately documented to notify individuals: Yes [KEY]
+- 3.03f Data Protection Impact Assessments conducted for high-risk processing activities: Yes [KEY]
+- 3.03g Regular employee training on data protection risks and good practices: Yes [Standard]
+- 3.03h Procedures to handle individuals' data protection rights (access, erasure, objection): Yes [KEY]
+- 3.03i Data Protection by Design and by Default implemented in project methodology: Yes [KEY]
+
+Section 3 Pass/Fail Rule: 1 Key ratio fail = Total Fail; 3 Standard ratio fails = Total Fail.
+
+**General Result:** Any failure in any of the three sections results in a failed assessment overall.`,
+    category: "agency-rules",
+    tags: "financial-assessment,attachment-C,EBITDA,cash-ratio,quick-ratio,free-cash-flow,net-equity,interest-coverage,cybersecurity,data-protection,CISO,DPO,ISO-22301,key-criterion,standard-criterion,USD-5-million",
+  },
+  {
+    title: "Resolution 800 - Agency Fees Schedule (Attachment B)",
+    content: `Attachment B of Resolution 800 defines the Application of Agency Fees in Swiss Francs (CHF).
+
+**Fee Schedule:**
+- New Applicant - Registration Fee, Head Office Location: CHF 500
+- New Applicant - Application Fee, Head Office Location: CHF 1,000
+- New Applicant - Registration Fee, Branch Office Location: CHF 250
+- New Applicant - Application Fee, Branch Office Location: CHF 500
+- Annual Fee, Head Office Location: CHF 500
+- Annual Fee, Branch Office Location: CHF 250
+- Change of Ownership/Legal Status - Application Fee: CHF 1,000
+- Change of Name - Administrative Fee: CHF 500
+- Change of Location - Administrative Fee: CHF 500
+- Late Notification of Major Change (within 30 days): CHF 1,500
+- Financial Review Fee (for non-compliance with Local Financial Criteria): Cost-justified fee as determined by IATA
+
+**Key Notes:**
+- Annual fees are due no later than December 1 of the preceding year.
+- Invoices are issued in Swiss Francs (CHF) and collected through the BSP.
+- Non-payment by December 31 results in termination of the Sales Agency Agreement.
+- Reinstatement is possible if overdue fees are received by March 1 (if late payment was beyond Agent's control).
+- Agency fees are determined by Conference.`,
+    category: "agency-rules",
+    tags: "agency-fees,attachment-B,CHF,registration-fee,annual-fee,application-fee,resolution-800,BSP",
+  },
+
+  // === RESOLUTION 812 ===
+  {
+    title: "Resolution 812 - Passenger Sales Agency Rules Framework",
+    content: `Resolution 812 establishes the regulatory framework governing accreditation, operation, compliance, and risk management of IATA Accredited Passenger Sales Agents within the IATA Agency Programme.
+
+The Resolution provides the global operational structure ensuring reliable distribution of air transportation products through accredited agents and standardized BSP settlement mechanisms.
+
+**SECTION 1 - Agency Programme Joint Council (APJC):**
+The Agency Programme Joint Council (APJC) operates in each market where Resolution 812 applies.
+Key functions include:
+- Reviewing Agency Programme operations.
+- Recommending accreditation and financial criteria.
+- Providing governance balance between airlines and agents.
+- Submitting proposals to the Passenger Agency Conference.
+
+Composition:
+- Airline representatives.
+- Accredited agent representatives (equal representation).
+- IATA as ex-officio member.
+- Maximum voting members: 18.
+
+**SECTION 2 - Accreditation Requirements:**
+Four Accreditation Types:
+1. Standard Accreditation (No Cash Facility)
+2. Standard Accreditation (Cash Facility)
+3. Multi-Country Accreditation
+4. Euro-Zone Accreditation
+
+General Requirements:
+- Legal registration and licensing.
+- Qualified personnel trained in airline ticketing.
+- Financial capability and solvency.
+- Compliance with regulatory and AML requirements.
+- Secure electronic ticketing systems.
+- Protection of business and payment data.
+
+Authorized BSP Payment Methods:
+- Cash Payment Method
+- Customer Card Payment Method
+- IATA EasyPay
+- Alternative Transfer Methods
+
+**SECTION 3 - Maintenance of Accreditation:**
+Agents must:
+- Comply continuously with Passenger Sales Agency Agreement.
+- Maintain financial security validity.
+- Complete annual agency revalidation.
+- Provide information requested by IATA.
+
+Administrative Non-Compliance may result in removal of ticketing authority or termination of accreditation.
+
+**SECTION 4 - Risk Events:**
+Risk Events are circumstances affecting an Agent's financial standing or creditworthiness.
+Consequences may include increased remittance frequency, financial security requirements, suspension or termination actions.
+
+**Accreditation Principle:** Accreditation confirms that an Agent possesses operational competence, financial stability, and regulatory compliance, allowing participation in BSP airline distribution systems.`,
+    category: "agency-rules",
+    tags: "resolution-812,accreditation,agency-programme,BSP,APJC,risk-events,financial-security,passenger-sales-agency,compliance,agent-governance",
+  },
+
+  // === RESOLUTION 820e ===
+  {
+    title: "Resolution 820e - Reviews by the Travel Agency Commissioner",
+    content: `Resolution 820e establishes the independent review and dispute resolution mechanism within the IATA Agency Programme through the Travel Agency Commissioner.
+
+The Commissioner reviews decisions affecting Agents or applicants and ensures actions comply with applicable IATA Resolutions.
+
+**SECTION 1 - Jurisdiction:**
+The Commissioner has authority to review disputes including:
+- Rejection of accreditation applications.
+- Removal from Agency List.
+- Withdrawal of ticketing authority.
+- Change of ownership or location disputes.
+- Actions affecting an Agent's commercial survival.
+
+Decisions must be based strictly on applicable IATA Resolutions.
+
+**Review Initiation:**
+An Agent or applicant may request review when:
+- Accreditation is denied.
+- Agency Administrator decisions cause operational harm.
+- Ticket stock or electronic authority is withdrawn.
+
+Requests must normally be filed within 30 calendar days of decision notice.
+
+**Commissioner Powers:**
+The Commissioner may:
+- Examine evidence from all parties.
+- Grant interim relief.
+- Require financial guarantees when airline funds are at risk.
+- Stay enforcement actions pending review.
+
+**Agency Administrator Reviews:**
+The Administrator may initiate review where:
+- Accreditation criteria are no longer met.
+- Financial obligations are breached.
+- Accounting irregularities exist.
+- Standard Traffic Documents are misused.
+
+**Outcome:** The Commissioner issues written decisions including findings of fact, conclusions under Resolutions, and penalties or relief granted. This Resolution ensures procedural fairness and regulatory accountability within the Agency Programme.`,
+    category: "agency-rules",
+    tags: "resolution-820e,travel-agency-commissioner,dispute-resolution,accreditation-review,agency-list,compliance-enforcement,appeal-process",
+  },
+
+  // === RESOLUTION 880 ===
+  {
+    title: "Resolution 880 - Reduced Fares for Accredited Passenger Sales Agents",
+    content: `Resolution 880 defines conditions under which airlines may grant reduced fare international air transportation to Accredited Agents and related stakeholders.
+
+Reduced fares are discretionary and subject to airline policies and eligibility requirements.
+
+**Eligibility Purpose:**
+Reduced fare travel may be granted for:
+- Official industry meetings.
+- Vocational or training travel.
+- Agency Commissioner hearings.
+- Operational business activities of accredited agents.
+
+**Key Principles:**
+- Reduced fares are optional for Member Airlines.
+- Approval occurs on a bilateral airline basis.
+- Airline booking and ticketing policies apply.
+- Eligibility conditions must be satisfied.
+
+**Application Procedure:**
+Requirements include:
+- Completion of prescribed Application Form.
+- Submission before travel commencement.
+- Accurate passenger and itinerary information.
+- Responsibility of stakeholder for application accuracy.
+
+Airlines must refuse reduced fare requests if:
+- eligibility requirements are not met, or
+- application information is incomplete.
+
+**Financial Responsibility:**
+Applicants must:
+- pay applicable fares if approval is denied,
+- return tickets if eligibility changes,
+- certify correctness of submitted information.
+
+This Resolution supports professional development and industry coordination while maintaining airline commercial control.`,
+    category: "agency-rules",
+    tags: "resolution-880,reduced-fare,agent-benefits,training-travel,industry-meetings,discounted-transportation,IATA-agents",
   },
 ];
 
@@ -474,7 +935,6 @@ function wordMatch(text: string, term: string): boolean {
 }
 
 export function getBuiltInKnowledge(query: string): IATAKnowledgeEntry[] {
-  // Filter out stop words for more precise matching
   const terms = query
     .toLowerCase()
     .split(/\s+/)
@@ -492,7 +952,6 @@ export function getBuiltInKnowledge(query: string): IATAKnowledgeEntry[] {
       }
       return { ...entry, score };
     })
-    // Minimum score of 3 required — prevents weak false positives
     .filter((e) => e.score >= 3)
     .sort((a, b) => b.score - a.score)
     .slice(0, 5);
