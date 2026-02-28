@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createKnowledgeEntry, saveDocument } from "@/lib/db";
+import { ensureAdminApiEnabled } from "@/lib/runtime-guards";
 
 // ── Supported file types ───────────────────────────────────────────────────────
 const ALLOWED_EXTENSIONS = [
@@ -51,6 +52,8 @@ async function extractHtmlText(html: string): Promise<string> {
 // ── Main POST handler ──────────────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
   try {
+    const guard = ensureAdminApiEnabled();
+    if (guard) return guard;
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
 

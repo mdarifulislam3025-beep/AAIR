@@ -2,9 +2,13 @@ import { getAllKnowledgeEntries, createKnowledgeEntry } from "./db";
 import { IATA_KNOWLEDGE_BASE } from "./iata-data";
 
 export function seedDatabase() {
-  const existing = getAllKnowledgeEntries();
-  const builtInCount = existing.filter((e) => e.source === "built-in").length;
+  const existingEntries = getAllKnowledgeEntries() as Array<{ source?: string }>;
 
+  const builtInCount = existingEntries.filter(
+    (entry) => entry.source === "built-in"
+  ).length;
+
+  // Seed only if built-in data not already present
   if (builtInCount === 0) {
     for (const entry of IATA_KNOWLEDGE_BASE) {
       createKnowledgeEntry({
@@ -15,6 +19,9 @@ export function seedDatabase() {
         source: "built-in",
       });
     }
-    console.log(`Seeded ${IATA_KNOWLEDGE_BASE.length} built-in IATA knowledge entries.`);
+
+    console.log(
+      `Seeded ${IATA_KNOWLEDGE_BASE.length} built-in IATA knowledge entries.`
+    );
   }
 }

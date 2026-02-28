@@ -37,7 +37,7 @@ Pre-loaded with comprehensive knowledge covering:
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
-- **Database**: SQLite (via better-sqlite3)
+- **Database**: JSON file storage (`data/aair.json`)
 - **AI**: OpenAI-compatible API (configurable)
 
 ## Getting Started
@@ -52,12 +52,33 @@ Pre-loaded with comprehensive knowledge covering:
 # Install dependencies
 npm install
 
-# Start development server
+# Unified app (chat + admin) on one port
 npm run dev
+
+# Agent-only app (chat APIs/UI only) on AGENT_PORT (default 3000)
+npm run dev:agent
+
+# Admin-only app (admin APIs/UI only) on ADMIN_PORT (default 3001)
+npm run dev:admin
 ```
 
 Open [http://localhost:3000](http://localhost:3000) for the chat interface.
 Open [http://localhost:3000/admin](http://localhost:3000/admin) for the admin panel.
+
+
+### Split Agent/Admin ports
+
+You can run the app in 3 modes with environment variables:
+
+- `APP_MODE=unified` (default): both chat and admin are enabled.
+- `APP_MODE=agent`: only user-facing chat routes/APIs are enabled.
+- `APP_MODE=admin`: only admin routes/APIs are enabled.
+
+Port variables:
+- `AGENT_PORT` (default `3000`)
+- `ADMIN_PORT` (default `3001`)
+
+In split mode, disabled routes return `404` for better isolation.
 
 ### AI Configuration
 
@@ -102,7 +123,7 @@ src/
 │   ├── DocumentUploader.tsx    # File upload UI
 │   └── SettingsPanel.tsx       # AI settings & dashboard
 └── lib/
-    ├── db.ts                   # SQLite database layer
+    ├── db.ts                   # JSON datastore layer
     ├── ai.ts                   # AI response engine
     ├── iata-data.ts            # Built-in IATA knowledge
     └── seed.ts                 # Database seeder

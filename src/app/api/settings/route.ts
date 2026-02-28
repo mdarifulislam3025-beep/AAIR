@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSetting, setSetting, getStats } from "@/lib/db";
 import { seedDatabase } from "@/lib/seed";
+import { ensureAdminApiEnabled } from "@/lib/runtime-guards";
 
 let seeded = false;
 
@@ -13,6 +14,9 @@ function ensureSeeded() {
 
 export async function GET() {
   try {
+    const guard = ensureAdminApiEnabled();
+    if (guard) return guard;
+
     ensureSeeded();
     const stats = getStats();
     const hasApiKey = !!getSetting("openai_api_key");
@@ -33,6 +37,9 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const guard = ensureAdminApiEnabled();
+    if (guard) return guard;
+
     ensureSeeded();
     const body = await request.json();
     const { openai_api_key, ai_model, api_base_url } = body;
