@@ -2,11 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateResponse } from "@/lib/ai";
 import { saveChatMessage, getChatHistory } from "@/lib/db";
 import { seedDatabase } from "@/lib/seed";
+import { ensureAgentApiEnabled } from "@/lib/runtime-guards";
 
 let seeded = false;
 
 export async function POST(request: NextRequest) {
   try {
+    const guard = ensureAgentApiEnabled();
+    if (guard) return guard;
     if (!seeded) {
       seedDatabase();
       seeded = true;
