@@ -1,13 +1,11 @@
-import { getDb, createKnowledgeEntry } from "./db";
+import { getAllKnowledgeEntries, createKnowledgeEntry } from "./db";
 import { IATA_KNOWLEDGE_BASE } from "./iata-data";
 
 export function seedDatabase() {
-  const db = getDb();
-  const count = (
-    db.prepare("SELECT COUNT(*) as count FROM knowledge_entries WHERE source = 'built-in'").get() as { count: number }
-  ).count;
+  const existing = getAllKnowledgeEntries();
+  const builtInCount = existing.filter((e) => e.source === "built-in").length;
 
-  if (count === 0) {
+  if (builtInCount === 0) {
     for (const entry of IATA_KNOWLEDGE_BASE) {
       createKnowledgeEntry({
         title: entry.title,
