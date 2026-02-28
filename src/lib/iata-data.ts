@@ -448,22 +448,52 @@ export const IATA_KNOWLEDGE_BASE: IATAKnowledgeEntry[] = [
   },
 ];
 
+// Stop words to exclude from relevance scoring (mirrors db.ts)
+const STOP_WORDS = new Set([
+  "a","an","the","is","it","in","on","at","to","for","of","and","or","but",
+  "how","do","i","me","my","we","you","your","what","when","where","who",
+  "which","this","that","these","those","can","could","would","should","will",
+  "be","been","being","have","has","had","was","were","are","am","with",
+  "from","by","about","into","through","during","near","above","below",
+  "between","out","off","over","under","again","then","once","here","there",
+  "why","so","if","as","up","down","any","all","both","each","few","more",
+  "most","other","some","such","no","not","only","same","than","too","very",
+  "just","because","while","although","though","since","until","unless",
+  "please","tell","give","show","explain","describe","find","get","make",
+  "want","need","like","know","think","see","look","use","go","come","take",
+]);
+
+/** Escape special regex characters in a search term */
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** Returns true if `text` contains `term` as a whole word */
+function wordMatch(text: string, term: string): boolean {
+  return new RegExp(`(?<![a-z])${escapeRegex(term)}(?![a-z])`, "i").test(text);
+}
+
 export function getBuiltInKnowledge(query: string): IATAKnowledgeEntry[] {
-  const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+  // Filter out stop words for more precise matching
+  const terms = query
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((t) => t.length > 2 && !STOP_WORDS.has(t));
+
   if (terms.length === 0) return [];
 
   return IATA_KNOWLEDGE_BASE
     .map((entry) => {
-      const text = `${entry.title} ${entry.content} ${entry.tags}`.toLowerCase();
       let score = 0;
       for (const term of terms) {
-        if (text.includes(term)) score++;
-        if (entry.tags.toLowerCase().includes(term)) score += 2;
-        if (entry.title.toLowerCase().includes(term)) score += 3;
+        if (wordMatch(entry.title, term)) score += 3;
+        if (wordMatch(entry.tags, term)) score += 2;
+        if (wordMatch(entry.content, term)) score += 1;
       }
       return { ...entry, score };
     })
-    .filter((e) => e.score > 0)
+    // Minimum score of 3 required — prevents weak false positives
+    .filter((e) => e.score >= 3)
     .sort((a, b) => b.score - a.score)
     .slice(0, 5);
 }
