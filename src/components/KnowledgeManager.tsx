@@ -25,6 +25,7 @@ const CATEGORIES = [
   "travel-documents",
   "ground-handling",
   "airline-operations",
+  "agency-rules",
   "environment",
   "passenger-services",
   "uploaded",

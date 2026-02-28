@@ -17,6 +17,8 @@ const SUGGESTED_QUESTIONS = [
   "What are the 9 classes of dangerous goods?",
   "Explain codeshare and interline agreements",
 ];
+const appMode = process.env.NEXT_PUBLIC_APP_MODE || "unified";
+const showAdminLink = appMode === "unified" || appMode === "admin";
 
 function formatMarkdown(text: string): string {
   let html = text
@@ -127,12 +129,14 @@ export default function ChatInterface() {
               <p className="text-xs text-slate-500">AI Agent for IATA Rules & Airline Regulations</p>
             </div>
           </div>
-          <a
-            href="/admin"
-            className="text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors px-3 py-1.5 rounded-lg hover:bg-blue-50"
-          >
-            Admin Panel
-          </a>
+          {showAdminLink && (
+            <a
+              href="/admin"
+              className="text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors px-3 py-1.5 rounded-lg hover:bg-blue-50"
+            >
+              Admin Panel
+            </a>
+          )}
         </div>
       </header>
 

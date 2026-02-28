@@ -13,6 +13,9 @@ const TABS: { id: Tab; label: string; description: string }[] = [
   { id: "upload", label: "Upload Documents", description: "Train with files" },
   { id: "settings", label: "Settings", description: "AI configuration" },
 ];
+const appMode = process.env.NEXT_PUBLIC_APP_MODE || "unified";
+const showChatLink = appMode === "unified" || appMode === "agent";
+
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState<Tab>("dashboard");
@@ -31,12 +34,14 @@ export default function AdminPanel() {
               <p className="text-xs text-slate-500">Train & manage the AI agent</p>
             </div>
           </div>
-          <a
-            href="/"
-            className="text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors px-3 py-1.5 rounded-lg hover:bg-blue-50"
-          >
-            Back to Chat
-          </a>
+          {showChatLink && (
+            <a
+              href="/"
+              className="text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors px-3 py-1.5 rounded-lg hover:bg-blue-50"
+            >
+              Back to Chat
+            </a>
+          )}
         </div>
       </header>
 
