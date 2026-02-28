@@ -82,6 +82,21 @@ Port variables:
 
 In split mode, disabled routes return `404` for better isolation.
 
+
+### Split Agent/Admin ports
+
+You can run the app in 3 modes with environment variables:
+
+- `APP_MODE=unified` (default): both chat and admin are enabled.
+- `APP_MODE=agent`: only user-facing chat routes/APIs are enabled.
+- `APP_MODE=admin`: only admin routes/APIs are enabled.
+
+Port variables:
+- `AGENT_PORT` (default `3000`)
+- `ADMIN_PORT` (default `3001`)
+
+In split mode, disabled routes return `404` for better isolation.
+
 ### AI Configuration
 
 The agent works in two modes:
