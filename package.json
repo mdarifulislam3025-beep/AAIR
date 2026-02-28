@@ -8,8 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dev:agent": "APP_MODE=agent NEXT_PUBLIC_APP_MODE=agent AGENT_PORT=${AGENT_PORT:-3000} next dev -p ${AGENT_PORT:-3000}",
-    "dev:admin": "APP_MODE=admin NEXT_PUBLIC_APP_MODE=admin ADMIN_PORT=${ADMIN_PORT:-3001} next dev -p ${ADMIN_PORT:-3001}"
+    "dev:agent": "APP_MODE=agent AGENT_PORT=${AGENT_PORT:-3000} next dev -p ${AGENT_PORT:-3000}",
+    "dev:admin": "APP_MODE=admin ADMIN_PORT=${ADMIN_PORT:-3001} next dev -p ${ADMIN_PORT:-3001}"
   },
   "dependencies": {
     "cheerio": "^1.2.0",

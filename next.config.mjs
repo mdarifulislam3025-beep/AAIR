@@ -1,12 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: [
-      "better-sqlite3",
-      "pdf-parse",
-      "mammoth",
-      "cheerio",
-    ],
+  env: {
+    NEXT_PUBLIC_APP_MODE: process.env.APP_MODE || "unified",
   },
 };
 

@@ -420,6 +420,98 @@ export const IATA_KNOWLEDGE_BASE: IATAKnowledgeEntry[] = [
     tags: "CORSIA,SAF,environment,carbon,emissions,net-zero,sustainability",
   },
 
+
+  // === PASSENGER AGENCY AGREEMENT (RESOLUTION 824) ===
+  {
+    title: "IATA Resolution 824 - Passenger Sales Agency Agreement (Version II) Overview",
+    content: `Extracted from the Passenger Agency Conference Resolutions Manual (pages 414-417), Resolution 824 (Version II):
+
+1. **Agreement Scope and Adoption**: The Passenger Sales Agency Agreement form is adopted by the Agency Administrator and implemented upon notification. The agreement text references applicability (including exceptions such as USA variants in the printed form).
+
+2. **Effectiveness (Section 1)**: The agreement becomes effective between Agent and Carrier upon appointment under the Sales Agency Rules in the country/locations concerned. Amendments to the Agreement have force once in effect under those rules.
+
+3. **Incorporated Framework (Section 2)**: The relationship incorporates Sales Agency Rules, BSP rules (where applicable), local standards issued under Sales Agency Rules, and other applicable IATA Resolutions and provisions derived from them.
+
+4. **Selling Carrier Services (Section 3)**: Agents are authorized to sell air passenger transportation (and authorized ancillary/other services) on behalf of appointed carriers, under carrier tariffs, conditions of carriage, and written instructions.
+
+5. **Compliance Principle**: The Agent must not vary core carriage terms set by the Carrier and must complete Traffic Documents in the required manner.
+
+> Note: This entry is transcribed from photographed pages and should be verified against the latest official IATA publication for legal use.`,
+    category: "agency-rules",
+    tags: "resolution-824,passenger-sales-agency-agreement,agency-administration,carrier-agent,version-ii",
+  },
+  {
+    title: "IATA Resolution 824 - Observance, Designation, and Traffic Document Custody",
+    content: `Extracted clauses from Resolution 824 (pages 415-416):
+
+1. **Observance of Laws and Regulations (Section 4)**: Agent shall observe applicable government laws/regulations concerning sale of air transportation in relevant territories.
+
+2. **Agency Designation (Section 5)**: Agent shall not represent itself as a "General Agent" or use designations implying it is a carrier office or member office.
+
+3. **Custody of Traffic Documents/Identification Plates (Section 6)**:
+   - Traffic Documents and Identification Plates deposited by Carrier (or ISS Management acting on Carrier's behalf) remain Carrier property.
+   - Agent acknowledges no proprietary rights in such documents/plates.
+   - Carrier/ISS may require immediate return at any time.
+
+4. **Automated Ticketing Controls (Section 6.3/6.4 context)**:
+   - If Agent issues documents via automated ticketing on behalf of Carrier, Carrier may withdraw that authority.
+   - Agent must cease issuance where default/suspension conditions apply under Sales Agency Rules.
+   - For third-party systems, Agent must obtain required written confirmations/specifications before issuing on Carrier's behalf.
+
+> Note: Transcribed from image pages; confirm wording against the official manual before contractual/legal reliance.`,
+    category: "agency-rules",
+    tags: "resolution-824,traffic-documents,identification-plates,automated-ticketing,compliance",
+  },
+  {
+    title: "IATA Resolution 824 - Remittance, Refunds, Records, Confidentiality, and Termination",
+    content: `Extracted clauses from Resolution 824 (pages 415-416):
+
+1. **Monies Due and Remittance (Section 7)**:
+   - Monies collected by the Agent for transportation/ancillary services (net of applicable remuneration where permitted) are Carrier property and held in trust until accounted/settled.
+   - Agent remains responsible for remittance under required timelines/conditions and may face immediate due-and-payable consequences in insolvency-like events.
+
+2. **Refunds (Section 8)**: Agent shall process refunds in line with Carrier tariffs, conditions of carriage, and written instructions; generally only for Traffic Documents issued by that Agent.
+
+3. **Remuneration (Section 9)**: Carrier remuneration to Agent is as communicated by Carrier and constitutes compensation for services rendered to Carrier.
+
+4. **Records and Inspection (Section 10)**: Agent shall maintain records/accounts with supporting documents and preserve them for inspection/copying by relevant Carrier for a defined retention period (shown as at least two years in the extracted text).
+
+5. **Confidentiality (Section 11)**: Carrier and Agent (including officers/employees/agents in scope) treat possession data/information as confidential except where law requires disclosure.
+
+6. **Transfer/Assignment/Change and Termination (Sections 12-13)**:
+   - Assignment/transfer restrictions apply.
+   - Prior notice obligations exist for legal-status/ownership/name/location changes.
+   - Termination mechanics are governed with reference to Sales Agency Rules and specified notice effects.
+
+> Note: Transcribed from photographed pages; verify exact legal language in the official IATA source.`,
+    category: "agency-rules",
+    tags: "resolution-824,remittance,refunds,records,confidentiality,termination",
+  },
+  {
+    title: "IATA Resolution 824 - Indemnities, Notices, Applicable Law, Severability, Supersession",
+    content: `Extracted clauses from Resolution 824 (pages 416-417):
+
+1. **Indemnities and Waiver (Section 15 context)**:
+   - Carrier indemnity language appears for losses/injuries/damage tied to transportation/ancillary services and Carrier failures in defined circumstances.
+   - Agent indemnity language appears for losses/injury/damage arising from negligent acts/omissions, breach by Agent, or unauthorized/negligent system use by Agent-side personnel/contractors.
+
+2. **Notices (Section 16)**:
+   - Notices under the agreement may be sent between Carrier/Agency Administrator/Agent and are sufficient when dispatched by means providing proof, addressed to principal offices or specified Agency Administrator address.
+
+3. **Applicable Law (Section 17)**:
+   - Agreement interpreted/governed by law of principal place of business of Agent, with branch-office dispute localization rules reflected in the extracted text.
+
+4. **Severability (Section 18)**:
+   - Invalidity of one provision does not invalidate remaining provisions, which continue binding/effective.
+
+5. **Other Agreements Superseded (Section 19)**:
+   - Agreement supersedes prior Passenger Sales Agency Agreements for approved locations (subject to text-specific exceptions and without prejudice to existing rights/liabilities).
+
+> Note: OCR-style transcription from images; consult the official Resolution 824 text for definitive wording.`,
+    category: "agency-rules",
+    tags: "resolution-824,indemnity,notices,applicable-law,severability,superseded-agreements",
+  },
+
   // === ACCESSIBILITY ===
   {
     title: "IATA Passenger Accessibility and Special Assistance",
