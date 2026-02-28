@@ -420,6 +420,62 @@ export const IATA_KNOWLEDGE_BASE: IATAKnowledgeEntry[] = [
     tags: "CORSIA,SAF,environment,carbon,emissions,net-zero,sustainability",
   },
 
+  // === RESOLUTIONS 812 / 820e / 880 ===
+  {
+    title: "Resolution 812 - Passenger Sales Agency Rules Framework",
+    content: `Resolution 812 establishes the regulatory framework for accreditation, operation, compliance, and risk management of IATA Accredited Passenger Sales Agents within the IATA Agency Programme.
+
+1. **Agency Programme Joint Council (APJC)**: Operates in markets where the Resolution applies, with balanced airline and agent representation.
+
+2. **Accreditation Types**: Standard Accreditation (No Cash Facility), Standard Accreditation (Cash Facility), Multi-Country Accreditation, and Euro-Zone Accreditation.
+
+3. **Core Accreditation Requirements**: Legal registration/licensing, qualified personnel, financial capability, compliance controls, secure ticketing, and data protection.
+
+4. **Maintenance of Accreditation**: Ongoing compliance, valid financial security, annual revalidation, and response to IATA information requests.
+
+5. **Risk Events**: Events affecting financial standing or creditworthiness may trigger increased remittance frequency, additional financial security, suspension, or termination actions.
+
+6. **Accreditation Principle**: Confirms operational competence, financial stability, and regulatory compliance for participation in BSP distribution and settlement systems.`,
+    category: "agency-rules",
+    tags: "resolution-812,accreditation,agency-programme,BSP,APJC,risk-events,financial-security,passenger-sales-agency,compliance",
+  },
+  {
+    title: "Resolution 820e - Reviews by the Travel Agency Commissioner",
+    content: `Resolution 820e establishes an independent review and dispute-resolution mechanism through the Travel Agency Commissioner.
+
+1. **Jurisdiction**: Includes accreditation rejection, removal from Agency List, withdrawal of ticketing authority, change-of-ownership/location disputes, and other material actions.
+
+2. **Review Initiation**: Agents/applicants may request review after qualifying decisions, generally within 30 calendar days of decision notice.
+
+3. **Commissioner Powers**: Examine evidence, grant interim relief, require financial guarantees where funds are at risk, and stay enforcement actions pending review.
+
+4. **Agency Administrator Reviews**: May be initiated when accreditation criteria are no longer met, financial obligations are breached, accounting irregularities occur, or Standard Traffic Documents are misused.
+
+5. **Outcome**: Written decisions include findings of fact, conclusions under applicable Resolutions, and any relief or penalties granted.
+
+6. **Purpose**: Ensures procedural fairness and regulatory accountability within the Agency Programme.`,
+    category: "agency-rules",
+    tags: "resolution-820e,travel-agency-commissioner,dispute-resolution,accreditation-review,agency-list,compliance-enforcement,appeal-process",
+  },
+  {
+    title: "Resolution 880 - Reduced Fares for Accredited Passenger Sales Agents",
+    content: `Resolution 880 defines conditions under which airlines may grant reduced-fare international transportation to accredited agents and related stakeholders.
+
+1. **Eligibility Purpose**: May include official industry meetings, vocational/training travel, Agency Commissioner hearings, and operational business travel.
+
+2. **Key Principles**: Reduced fares are discretionary, approved airline-by-airline, and remain subject to airline booking/ticketing policies.
+
+3. **Application Procedure**: Requires prescribed forms, submission before travel, complete and accurate passenger/itinerary details, and stakeholder responsibility for correctness.
+
+4. **Refusal Conditions**: Airlines may refuse requests where eligibility is not met or the application is incomplete.
+
+5. **Financial Responsibility**: Applicants may need to pay applicable fares if denied, return tickets if eligibility changes, and certify submitted information.
+
+6. **Policy Intent**: Supports professional development and industry coordination while preserving airline commercial control.`,
+    category: "agency-rules",
+    tags: "resolution-880,reduced-fare,agent-benefits,training-travel,industry-meetings,discounted-transportation,IATA-agents",
+  },
+
 
   // === PASSENGER AGENCY AGREEMENT (RESOLUTION 824) ===
   {
