@@ -139,25 +139,54 @@ export function deleteKnowledgeEntry(id: number): boolean {
   return store.knowledge_entries.length < before;
 }
 
+// Stop words to exclude from relevance scoring
+const STOP_WORDS = new Set([
+  "a","an","the","is","it","in","on","at","to","for","of","and","or","but",
+  "how","do","i","me","my","we","you","your","what","when","where","who",
+  "which","this","that","these","those","can","could","would","should","will",
+  "be","been","being","have","has","had","was","were","are","am","with",
+  "from","by","about","into","through","during","near","above","below",
+  "between","out","off","over","under","again","then","once","here","there",
+  "why","so","if","as","up","down","any","all","both","each","few","more",
+  "most","other","some","such","no","not","only","same","than","too","very",
+  "just","because","while","although","though","since","until","unless",
+  "please","tell","give","show","explain","describe","find","get","make",
+  "want","need","like","know","think","see","look","use","go","come","take",
+]);
+
+/** Escape special regex characters in a search term */
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** Returns true if `text` contains `term` as a whole word */
+function wordMatch(text: string, term: string): boolean {
+  return new RegExp(`(?<![a-z])${escapeRegex(term)}(?![a-z])`, "i").test(text);
+}
+
 export function searchKnowledge(query: string, limit = 10): KnowledgeEntry[] {
   const store = loadDb();
-  const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+  // Filter out stop words for more precise matching
+  const terms = query
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((t) => t.length > 2 && !STOP_WORDS.has(t));
+
   if (terms.length === 0) return [];
 
   const scored = store.knowledge_entries
     .map((e) => {
-      const titleL = e.title.toLowerCase();
-      const contentL = e.content.toLowerCase();
-      const tagsL = e.tags.toLowerCase();
       let score = 0;
       for (const t of terms) {
-        if (titleL.includes(t)) score += 3;
-        if (tagsL.includes(t)) score += 2;
-        if (contentL.includes(t)) score += 1;
+        if (wordMatch(e.title, t)) score += 3;
+        if (wordMatch(e.tags, t)) score += 2;
+        if (wordMatch(e.content, t)) score += 1;
       }
       return { entry: e, score };
     })
-    .filter((x) => x.score > 0)
+    // Minimum score of 3 required: at least one whole-word title match,
+    // or one tag match + one content match — prevents false positives
+    .filter((x) => x.score >= 3)
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)
     .map((x) => x.entry);

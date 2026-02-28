@@ -14,7 +14,12 @@ interface KnowledgeResult {
   source?: string;
 }
 
-function buildContext(query: string): string {
+interface ContextResult {
+  context: string;
+  hasKnowledge: boolean;
+}
+
+function buildContext(query: string): ContextResult {
   // Search admin-added knowledge base
   const dbResults = searchKnowledge(query, 5) as KnowledgeResult[];
 
@@ -37,34 +42,76 @@ function buildContext(query: string): string {
     }
   }
 
-  return contextParts.join("\n");
+  const context = contextParts.join("\n");
+  const hasKnowledge = dbResults.length > 0 || builtInResults.length > 0;
+
+  return { context, hasKnowledge };
 }
 
-const SYSTEM_PROMPT = `You are AAIR (AI Agent for IATA Rules & Airline Regulations), an expert AI assistant specializing in:
+const NOT_FOUND_MESSAGE = `I'm sorry, but I don't have specific information about that topic in my knowledge base.
 
-1. **IATA Rules & Regulations**: Baggage rules, ticketing, fare construction, dangerous goods regulations (DGR), passenger rights, airport/airline codes, safety standards (IOSA), cargo operations, and more.
+**Here's what I suggest:**
 
-2. **Airline Industry Knowledge**: Codeshare agreements, interline operations, alliance structures, ground handling (SGHA/ISAGO), environmental regulations (CORSIA/SAF), and passenger services.
+🔍 **Search Online:**
+- [IATA Official Website](https://www.iata.org) — iata.org
+- [ICAO](https://www.icao.int) — icao.int
+- The airline's official website for carrier-specific policies
 
-3. **Regulatory Frameworks**: EU261, Montreal Convention, US DOT regulations, and other passenger protection laws.
+📞 **Contact the Relevant Authority:**
+- **Your Airline**: Contact the airline's customer service or reservations team directly
+- **Airport Authority**: For airport-specific queries, contact the airport's information desk
+- **National Aviation Authority**: Such as FAA (USA), EASA (Europe), DGCA (India), CAA (UK), or your country's civil aviation authority
+- **IATA**: For industry standards and regulations — [IATA Contact](https://www.iata.org/en/about/contact/)
 
-Guidelines:
-- Provide accurate, detailed answers based on the knowledge base context provided
-- Cite specific IATA resolutions, regulations, or standards when applicable
-- If the knowledge base contains relevant information, use it as the primary source
-- If you're unsure about specific details, clearly state that and recommend consulting the latest IATA publications
-- Be professional, clear, and thorough in your responses
-- Format responses with clear structure using bullet points and sections when appropriate
-- When discussing rules, mention any important exceptions or variations`;
+> ⚠️ *AAIR's knowledge base covers IATA rules, airline regulations, baggage policies, ticketing, dangerous goods, passenger rights, and related topics. If you have a question within these areas, please try rephrasing or ask the admin to add the relevant information to the knowledge base.*`;
+
+const SYSTEM_PROMPT = `You are AAIR (AI Agent for IATA Rules & Airline Regulations), an expert AI assistant specializing in IATA rules, airline regulations, baggage policies, ticketing, dangerous goods (DGR), passenger rights, airport/airline codes, safety standards (IOSA), cargo operations, codeshare agreements, environmental regulations (CORSIA/SAF), and related aviation topics.
+
+**CRITICAL RULES — You MUST follow these strictly:**
+
+1. **Knowledge Base Only**: You MUST answer ONLY based on the knowledge base context provided to you in this conversation. Do NOT use any general knowledge, training data, or information outside of the provided context.
+
+2. **No Context = No Answer**: If the provided knowledge base context does NOT contain relevant information to answer the user's question, you MUST NOT attempt to answer from general knowledge. Instead, respond EXACTLY with this message:
+
+---
+I'm sorry, but I don't have specific information about that topic in my knowledge base.
+
+**Here's what I suggest:**
+
+🔍 **Search Online:**
+- [IATA Official Website](https://www.iata.org) — iata.org
+- [ICAO](https://www.icao.int) — icao.int
+- The airline's official website for carrier-specific policies
+
+📞 **Contact the Relevant Authority:**
+- **Your Airline**: Contact the airline's customer service or reservations team directly
+- **Airport Authority**: For airport-specific queries, contact the airport's information desk
+- **National Aviation Authority**: Such as FAA (USA), EASA (Europe), DGCA (India), CAA (UK), or your country's civil aviation authority
+- **IATA**: For industry standards and regulations — [IATA Contact](https://www.iata.org/en/about/contact/)
+
+> ⚠️ *AAIR's knowledge base covers IATA rules, airline regulations, baggage policies, ticketing, dangerous goods, passenger rights, and related topics. If you have a question within these areas, please try rephrasing or ask the admin to add the relevant information to the knowledge base.*
+---
+
+3. **Cite Sources**: When answering from the knowledge base, cite specific IATA resolutions, regulations, or standards mentioned in the context.
+
+4. **Partial Information**: If the context contains only partial information, answer what you can from the context and clearly state which parts are not covered, then suggest the user contact the relevant authority for the missing details.
+
+5. **Professional Tone**: Be professional, clear, and thorough. Format responses with bullet points and sections when appropriate.`;
 
 export async function generateResponse(
   userMessage: string,
   chatHistory: ChatMessage[] = []
 ): Promise<string> {
-  const context = buildContext(userMessage);
+  const { context, hasKnowledge } = buildContext(userMessage);
   const apiKey = getSetting("openai_api_key");
   const model = getSetting("ai_model") || "gpt-3.5-turbo";
   const apiBaseUrl = getSetting("api_base_url") || "https://api.openai.com/v1";
+
+  // If no relevant knowledge found in the database, return the not-found message directly
+  // without calling the AI (saves API tokens and ensures consistent behavior)
+  if (!hasKnowledge) {
+    return NOT_FOUND_MESSAGE;
+  }
 
   // If we have an API key, use the OpenAI-compatible API
   if (apiKey) {
@@ -93,12 +140,11 @@ async function callOpenAI(
     { role: "system", content: SYSTEM_PROMPT },
   ];
 
-  if (context) {
-    messages.push({
-      role: "system",
-      content: `Use the following knowledge base context to answer the user's question:\n\n${context}`,
-    });
-  }
+  // Always inject the knowledge base context with strict instructions
+  messages.push({
+    role: "system",
+    content: `KNOWLEDGE BASE CONTEXT (use ONLY this information to answer):\n\n${context}\n\n---\nREMINDER: Answer strictly from the above context only. If the context does not contain enough information to answer the question, follow the "No Context = No Answer" rule from your instructions.`,
+  });
 
   // Add recent chat history (last 6 messages)
   const recentHistory = chatHistory.slice(-6);
@@ -117,7 +163,7 @@ async function callOpenAI(
     body: JSON.stringify({
       model,
       messages,
-      temperature: 0.3,
+      temperature: 0.2,
       max_tokens: 2000,
     }),
   });
@@ -133,23 +179,7 @@ async function callOpenAI(
 
 function generateRuleBasedResponse(query: string, context: string): string {
   if (!context || context.trim().length === 0) {
-    return `I appreciate your question, but I couldn't find specific information in my knowledge base about that topic.
-
-Here are some things I can help you with:
-- **Baggage Rules**: Checked baggage allowances, carry-on limits, lost/delayed baggage
-- **Ticketing**: E-ticketing, fare rules, refunds and changes
-- **Dangerous Goods**: DGR classifications, lithium battery rules
-- **Passenger Rights**: Denied boarding, delays, cancellations, EU261
-- **Airport/Airline Codes**: IATA 3-letter and 2-letter codes
-- **Safety**: IOSA audit standards
-- **Cargo**: Air waybills, e-freight, ULD types
-- **Travel Documents**: Passport/visa requirements, Timatic
-- **Ground Handling**: SGHA, ISAGO standards
-- **Environment**: CORSIA, Sustainable Aviation Fuel
-
-Please try rephrasing your question or ask about any of these topics!
-
-> **Note**: For more detailed AI-powered responses, an admin can configure an OpenAI API key in the Admin Panel settings.`;
+    return NOT_FOUND_MESSAGE;
   }
 
   // Extract the most relevant section from context
@@ -172,7 +202,7 @@ Please try rephrasing your question or ask about any of these topics!
     }
   }
 
-  response += `---\n*This response is generated from the AAIR knowledge base. For more detailed AI-powered responses, an admin can configure an API key in the Admin Panel.*`;
+  response += `---\n*This response is based strictly on the AAIR knowledge base. For more detailed AI-powered responses, an admin can configure an OpenAI API key in the Admin Panel.*`;
 
   return response;
 }
