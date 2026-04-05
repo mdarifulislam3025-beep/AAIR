@@ -159,6 +159,10 @@ src/
 | GET | `/api/settings` | Get settings & stats |
 | POST | `/api/settings` | Update settings |
 
+## Additional Product Docs
+
+- Travel marketplace RFQ platform specification: `docs/travel-marketplace-rfq-spec.md`
+
 ## License
 
 MIT
