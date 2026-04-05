@@ -36,12 +36,12 @@ export function listUserFlightRequests(userId: number) {
   return store.flightRequests.filter((r) => r.userId === userId);
 }
 
-export function getFlightRequestDetails(requestId: number, actorUserId: number, role: "customer" | "admin" | "agent") {
+export function getFlightRequestDetails(requestId: number, actorUserId: number, role: "user" | "admin" | "agent") {
   const store = loadErpStore();
   const request = store.flightRequests.find((r) => r.id === requestId);
   if (!request) throw new Error("Flight request not found");
 
-  if (role === "customer" && request.userId !== actorUserId) throw new Error("Forbidden");
+  if (role === "user" && request.userId !== actorUserId) throw new Error("Forbidden");
   if (role === "agent" && request.assignedAgentId !== actorUserId) throw new Error("Forbidden");
 
   const responses = store.flightResponses.filter((r) => r.requestId === requestId);

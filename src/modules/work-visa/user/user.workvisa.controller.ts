@@ -4,7 +4,7 @@ import { err, ok, parseJson } from "@/modules/common/http";
 import { createGenericRequest, listUserGenericRequests } from "@/modules/common/request.service";
 
 export async function userCreateWorkVisaRequest(request: NextRequest): Promise<NextResponse> {
-  const auth = authorizeRole(request, "customer");
+  const auth = authorizeRole(request, "user");
   if (auth instanceof NextResponse) return auth;
   const body = await parseJson(request);
   if (typeof body.packageId !== "number" || typeof body.cvUrl !== "string") return err("packageId and cvUrl are required", 400);
@@ -12,7 +12,7 @@ export async function userCreateWorkVisaRequest(request: NextRequest): Promise<N
 }
 
 export async function userListWorkVisaRequests(request: NextRequest): Promise<NextResponse> {
-  const auth = authorizeRole(request, "customer");
+  const auth = authorizeRole(request, "user");
   if (auth instanceof NextResponse) return auth;
   return ok(listUserGenericRequests(auth.userId, "workVisa"), "Work visa requests fetched");
 }

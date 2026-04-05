@@ -1,4 +1,4 @@
-export type UserRole = "customer" | "agent" | "admin";
+export type UserRole = "user" | "agent" | "admin";
 
 export type FlightTripType = "OW" | "RT" | "MC";
 export type CabinClass = "ECONOMY" | "PREMIUM_ECONOMY" | "BUSINESS" | "FIRST";

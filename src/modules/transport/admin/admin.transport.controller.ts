@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { authorizeRole } from "@/modules/common/middleware/auth";
 import { err, ok, parseJson } from "@/modules/common/http";
 import { assignGenericRequest, listAllGenericRequests, updateGenericRequestStatus } from "@/modules/common/request.service";
+import { assertStatus } from "@/modules/common/validation";
 
 export async function adminListTransportRequests(request: NextRequest): Promise<NextResponse> {
   const auth = authorizeRole(request, "admin");
@@ -25,9 +26,9 @@ export async function adminUpdateTransportStatus(request: NextRequest, id: numbe
   const auth = authorizeRole(request, "admin");
   if (auth instanceof NextResponse) return auth;
   const body = await parseJson(request);
-  if (typeof body.status !== "string") return err("status is required", 400);
   try {
-    return ok(updateGenericRequestStatus(id, "transport", body.status as never, auth.userId), "Transport status updated");
+    const status = assertStatus(body.status);
+    return ok(updateGenericRequestStatus(id, "transport", status, auth.userId), "Transport status updated");
   } catch (e) {
     return err((e as Error).message, 400);
   }

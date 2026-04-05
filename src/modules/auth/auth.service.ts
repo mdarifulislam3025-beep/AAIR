@@ -19,7 +19,7 @@ export function registerUser(input: { name: string; email: string; phone: string
   }
 
   const { hash, salt } = hashPassword(input.password);
-  const role = input.role ?? "customer";
+  const role = input.role ?? "user";
   const user = {
     id: nextId(store, "users"),
     name: input.name,

@@ -10,7 +10,7 @@ export async function userListPackages(request: NextRequest): Promise<NextRespon
 }
 
 export async function userCreatePackageRequest(request: NextRequest): Promise<NextResponse> {
-  const auth = authorizeRole(request, "customer");
+  const auth = authorizeRole(request, "user");
   if (auth instanceof NextResponse) return auth;
   const body = await parseJson(request);
   if (typeof body.packageId !== "number") return err("packageId is required", 400);
@@ -18,7 +18,7 @@ export async function userCreatePackageRequest(request: NextRequest): Promise<Ne
 }
 
 export async function userListPackageRequests(request: NextRequest): Promise<NextResponse> {
-  const auth = authorizeRole(request, "customer");
+  const auth = authorizeRole(request, "user");
   if (auth instanceof NextResponse) return auth;
   return ok(listUserGenericRequests(auth.userId, "package"), "Package requests fetched");
 }

@@ -19,6 +19,12 @@ function base64url(input: Buffer | string): string {
     .replace(/\//g, "_");
 }
 
+function normalizeBase64Url(input: string): string {
+  const base = input.replace(/-/g, "+").replace(/_/g, "/");
+  const padLength = (4 - (base.length % 4)) % 4;
+  return `${base}${"=".repeat(padLength)}`;
+}
+
 function sign(data: string): string {
   return base64url(crypto.createHmac("sha256", JWT_SECRET).update(data).digest());
 }
@@ -44,12 +50,13 @@ export function verifyJwt(token: string): Claims | null {
   if (!header || !body || !signature) return null;
 
   const expected = sign(`${header}.${body}`);
-  if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) {
-    return null;
-  }
+  const signatureBuffer = Buffer.from(signature);
+  const expectedBuffer = Buffer.from(expected);
+  if (signatureBuffer.length !== expectedBuffer.length) return null;
+  if (!crypto.timingSafeEqual(signatureBuffer, expectedBuffer)) return null;
 
   try {
-    const claims = JSON.parse(Buffer.from(body, "base64").toString("utf-8")) as Claims;
+    const claims = JSON.parse(Buffer.from(normalizeBase64Url(body), "base64").toString("utf-8")) as Claims;
     if (claims.exp < Math.floor(Date.now() / 1000)) return null;
     return claims;
   } catch {

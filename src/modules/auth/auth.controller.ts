@@ -20,7 +20,7 @@ export async function registerController(request: NextRequest): Promise<NextResp
       email,
       phone,
       password,
-      role: role === "admin" || role === "agent" || role === "customer" ? role : "customer",
+      role: role === "admin" || role === "agent" || role === "user" ? role : "user",
     });
 
     return ok(

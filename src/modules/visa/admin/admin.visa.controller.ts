@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { authorizeRole } from "@/modules/common/middleware/auth";
 import { err, ok, parseJson } from "@/modules/common/http";
 import { listAllGenericRequests, updateGenericRequestStatus } from "@/modules/common/request.service";
+import { assertStatus } from "@/modules/common/validation";
 import { createPackage } from "@/modules/packages/package.service";
 
 export async function adminCreateVisaPackage(request: NextRequest): Promise<NextResponse> {
@@ -22,9 +23,9 @@ export async function adminUpdateVisaStatus(request: NextRequest, id: number): P
   const auth = authorizeRole(request, "admin");
   if (auth instanceof NextResponse) return auth;
   const body = await parseJson(request);
-  if (typeof body.status !== "string") return err("status is required", 400);
   try {
-    return ok(updateGenericRequestStatus(id, "visa", body.status as never, auth.userId), "Visa status updated");
+    const status = assertStatus(body.status);
+    return ok(updateGenericRequestStatus(id, "visa", status, auth.userId), "Visa status updated");
   } catch (e) {
     return err((e as Error).message, 400);
   }
